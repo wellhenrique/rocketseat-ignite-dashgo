@@ -1,15 +1,28 @@
 import { Box, Button, Stack } from "@chakra-ui/react";
-import { PaginationItem } from "./PaginationItem";
+import { useState } from "react";
+import {
+  PrimaryButton,
+  Pagination as PaginationLib,
+} from "softcenter-design-system";
 
-export function Pagination() {
-  const paginationNumber = [
-    { id: 1, isCurrent: true },
-    { id: 2, isCurrent: false },
-    { id: 3, isCurrent: false },
-    { id: 4, isCurrent: false },
-    { id: 5, isCurrent: false },
-  ];
+interface PaginationProps {
+  totalCountOfRegisters: number;
+  registerPerPage?: number;
+  currentPage?: number;
+  onPageChange: (page: number) => void;
+}
 
+export function Pagination(
+  {
+    // totalCountOfRegisters,
+    // registerPerPage = 10,
+    // currentPage = 1,
+    // onPageChange,
+  },
+) {
+  // const lastPage = Math.floor(totalCountOfRegisters / registerPerPage);
+  const [item, setItem] = useState(1);
+  console.log(item);
   return (
     <Stack
       direction={["column", "row"]}
@@ -18,19 +31,7 @@ export function Pagination() {
       alignContent="center"
       spacing="6"
     >
-      <Box>
-        <strong>0</strong> - <strong>5</strong> de <strong>50</strong>
-      </Box>
-
-      <Stack direction="row" spacing="2">
-        {paginationNumber.map((pagination) => (
-          <PaginationItem
-            key={pagination.id}
-            isCurrent={pagination.isCurrent}
-            number={pagination.id}
-          />
-        ))}
-      </Stack>
+      <PaginationLib currentPage={item} maxPages={10} setCurrent={setItem} />
     </Stack>
   );
 }

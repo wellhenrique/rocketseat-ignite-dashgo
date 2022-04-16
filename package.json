@@ -25,6 +25,7 @@
     "react-hook-form": "^7.29.0",
     "react-icons": "^4.3.1",
     "react-query": "^3.34.19",
+    "softcenter-design-system": "^0.0.26",
     "yup": "^0.32.11"
   },
   "devDependencies": {
