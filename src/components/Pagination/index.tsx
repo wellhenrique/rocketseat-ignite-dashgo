@@ -3,40 +3,33 @@ import { Box, Stack, Text } from "@chakra-ui/react";
 import { PaginationItem } from "./PaginationItem";
 
 interface PaginationProps {
-  totalCountOfRegisters: number;
-  registerPerPage?: number;
+  totalCount: number;
   currentPage?: number;
+  registersPerPage?: number;
   onPageChange: (page: number) => void;
 }
 
-const siblingCount = 1;
-
-function generatePagesArray(from: number, to: number) {
-  return [...new Array(to - from)]
-    .map((_, index) => {
-      return from + index + 1;
-    })
+const generatePagesArray = (from: number, to: number) =>
+  [...new Array(to - from)]
+    .map((_, index) => from + index + 1)
     .filter((page) => page > 0);
-}
 
-export function Pagination({
-  totalCountOfRegisters,
-  registerPerPage = 10,
+export const Pagination = ({
+  totalCount,
   currentPage = 1,
-  onPageChange,
-}: PaginationProps) {
-  const lastPage = Math.floor(totalCountOfRegisters / registerPerPage);
-
+  registersPerPage = 10,
+}: PaginationProps) => {
+  const lastPage = Math.ceil(totalCount / registersPerPage);
+  const siblingsCount = 2;
   const previousPages =
     currentPage > 1
-      ? generatePagesArray(currentPage - 1 - siblingCount, currentPage - 1)
+      ? generatePagesArray(currentPage - 1 - siblingsCount, currentPage - 1)
       : [];
-
   const nextPages =
     currentPage < lastPage
       ? generatePagesArray(
           currentPage,
-          Math.min(currentPage + siblingCount, lastPage),
+          Math.min(currentPage + siblingsCount, lastPage),
         )
       : [];
 
@@ -51,41 +44,40 @@ export function Pagination({
       <Box>
         <strong>0</strong> - <strong>10</strong> de <strong>1000</strong>
       </Box>
-      <Stack direction="row" spacing="2" />
 
-      {currentPage > 1 + siblingCount && (
-        <>
-          <PaginationItem number={1} />
-          {currentPage > 2 + siblingCount && (
-            <Text color="gray.300" width="8" textAlign="center">
-              ...
-            </Text>
-          )}
-        </>
-      )}
+      <Stack direction="row" spacing="2">
+        {currentPage > 1 + siblingsCount && (
+          <>
+            <PaginationItem number={1} />
+            {currentPage > 2 + siblingsCount && (
+              <Text color="gray.300" w="8" textAlign="center">
+                ...
+              </Text>
+            )}
+          </>
+        )}
 
-      {previousPages.length > 0 &&
-        previousPages.map((page) => {
-          return <PaginationItem number={currentPage} key={page} />;
-        })}
+        {previousPages.length > 0 &&
+          previousPages.map((page) => (
+            <PaginationItem number={page} key={page} />
+          ))}
 
-      <PaginationItem number={currentPage} isCurrent />
+        <PaginationItem number={currentPage} isCurrent />
 
-      {previousPages.length > 0 &&
-        previousPages.map((page) => {
-          return <PaginationItem number={currentPage} key={page} />;
-        })}
+        {nextPages.length > 0 &&
+          nextPages.map((page) => <PaginationItem number={page} key={page} />)}
 
-      {currentPage + siblingCount < lastPage && (
-        <>
-          <PaginationItem number={lastPage} />
-          {currentPage + 1 + siblingCount < siblingCount && (
-            <Text color="gray.300" width="8" textAlign="center">
-              ...
-            </Text>
-          )}
-        </>
-      )}
+        {currentPage + siblingsCount < lastPage && (
+          <>
+            {currentPage + 1 + siblingsCount < lastPage && (
+              <Text color="gray.300" w="8" textAlign="center">
+                ...
+              </Text>
+            )}
+            <PaginationItem number={lastPage} />
+          </>
+        )}
+      </Stack>
     </Stack>
   );
-}
+};
