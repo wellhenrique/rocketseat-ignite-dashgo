@@ -17,6 +17,7 @@ const generatePagesArray = (from: number, to: number) =>
 export const Pagination = ({
   totalCount,
   currentPage = 1,
+  onPageChange,
   registersPerPage = 10,
 }: PaginationProps) => {
   const lastPage = Math.ceil(totalCount / registersPerPage);
@@ -29,7 +30,7 @@ export const Pagination = ({
     currentPage < lastPage
       ? generatePagesArray(
           currentPage,
-          Math.min(currentPage + siblingsCount, lastPage),
+          Math.min(currentPage + siblingsCount, lastPage)
         )
       : [];
 
@@ -42,13 +43,13 @@ export const Pagination = ({
       alignContent="center"
     >
       <Box>
-        <strong>0</strong> - <strong>10</strong> de <strong>1000</strong>
+        <strong>0</strong> - <strong>10</strong> de <strong>200</strong>
       </Box>
 
       <Stack direction="row" spacing="2">
         {currentPage > 1 + siblingsCount && (
           <>
-            <PaginationItem number={1} />
+            <PaginationItem onPageChange={onPageChange} number={1} />
             {currentPage > 2 + siblingsCount && (
               <Text color="gray.300" w="8" textAlign="center">
                 ...
@@ -59,13 +60,27 @@ export const Pagination = ({
 
         {previousPages.length > 0 &&
           previousPages.map((page) => (
-            <PaginationItem number={page} key={page} />
+            <PaginationItem
+              onPageChange={onPageChange}
+              number={page}
+              key={page}
+            />
           ))}
 
-        <PaginationItem number={currentPage} isCurrent />
+        <PaginationItem
+          onPageChange={onPageChange}
+          number={currentPage}
+          isCurrent
+        />
 
         {nextPages.length > 0 &&
-          nextPages.map((page) => <PaginationItem number={page} key={page} />)}
+          nextPages.map((page) => (
+            <PaginationItem
+              onPageChange={onPageChange}
+              number={page}
+              key={page}
+            />
+          ))}
 
         {currentPage + siblingsCount < lastPage && (
           <>
@@ -74,7 +89,7 @@ export const Pagination = ({
                 ...
               </Text>
             )}
-            <PaginationItem number={lastPage} />
+            <PaginationItem onPageChange={onPageChange} number={lastPage} />
           </>
         )}
       </Stack>
