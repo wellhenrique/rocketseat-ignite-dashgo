@@ -17,7 +17,7 @@ const options: ApexOptions = {
     zoom: {
       enabled: false,
     },
-    foreColor: theme.colors.gray[500],
+    foreColor: "#c4c4c4",
   },
   grid: {
     show: false,
